@@ -6,8 +6,8 @@ from .execute import execute_in_subprocess
 SHORTCUT_FILE = '[Desktop Entry]\nName={name}\nExec={command}\nType=Application\n'
 PATH = os.getenv('ACTIVITY_PATH') or os.path.expanduser('~/.local/share/kactivitymanagerd/activities')
 ACTIVITY_STATE = {
-    '2': 'Activated',
-    '4': 'Deactivated'
+    '2': 'Started',
+    '4': 'Stopped'
 }
 
 
