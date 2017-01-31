@@ -90,4 +90,4 @@ ENV/
 
 # Custom
 .idea/
-.pyvenv/
+.pyvenv*

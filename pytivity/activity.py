@@ -1,19 +1,21 @@
 import os
 import shutil
 
+import xdg
+
 from .execute import execute_in_subprocess
 
 SHORTCUT_FILE = '[Desktop Entry]\nName={name}\nExec={command}\nType=Application\n'
-PATH = os.getenv('ACTIVITY_PATH') or os.path.expanduser('~/.local/share/kactivitymanagerd/activities')
+PATH = os.path.join(xdg.XDG_DATA_HOME, 'kactivitymanagerd/activities')
 ACTIVITY_STATE = {
     '2': 'Started',
     '4': 'Stopped'
 }
 
 
-class Activity:
+class Activity(object):
     def __init__(self, id_):
-        self.id = id_
+        self.id = str(id_)
         self._name = None
         self._description = None
         self._icon = None
@@ -24,19 +26,23 @@ class Activity:
         self._stopped = None
 
     @property
+    def _id(self):
+        return str(self.id)
+
+    @property
     def name(self):
         if not self._name:
             self._name = execute_in_subprocess(['qdbus', 'org.kde.ActivityManager',
                                                 '/ActivityManager/Activities',
                                                 'org.kde.ActivityManager.Activities.ActivityName',
-                                                self.id])[0]
+                                                self._id])[0]
         return self._name
 
     @name.setter
     def name(self, name):
         execute_in_subprocess(['qdbus', 'org.kde.ActivityManager', '/ActivityManager/Activities',
                                'org.kde.ActivityManager.Activities.SetActivityName',
-                               self.id, name])
+                               self._id, name])
         self._name = name
 
     @property
@@ -45,13 +51,13 @@ class Activity:
             self._description = execute_in_subprocess(['qdbus', 'org.kde.ActivityManager',
                                                        '/ActivityManager/Activities',
                                                        'org.kde.ActivityManager.Activities.ActivityDescription',
-                                                       self.id])[0] or 'No description'
+                                                       self._id])[0] or 'No description'
         return self._description
 
     @description.setter
     def description(self, description):
         execute_in_subprocess(['qdbus', 'org.kde.ActivityManager', '/ActivityManager/Activities',
-                               'org.kde.ActivityManager.Activities.SetActivityDescription', self.id,
+                               'org.kde.ActivityManager.Activities.SetActivityDescription', self._id,
                                description])
         self._description = description
 
@@ -59,14 +65,14 @@ class Activity:
     def icon(self):
         if not self._icon:
             self._icon = execute_in_subprocess(['qdbus', 'org.kde.ActivityManager', '/ActivityManager/Activities',
-                                                'org.kde.ActivityManager.Activities.ActivityIcon', self.id])[
+                                                'org.kde.ActivityManager.Activities.ActivityIcon', self._id])[
                              0] or 'No icon'
         return self._icon
 
     @icon.setter
     def icon(self, icon):
         execute_in_subprocess(['qdbus', 'org.kde.ActivityManager', '/ActivityManager/Activities',
-                               'org.kde.ActivityManager.Activities.SetActivityIcon', self.id, icon])
+                               'org.kde.ActivityManager.Activities.SetActivityIcon', self._id, icon])
         self._icon = icon
 
     @property
@@ -74,7 +80,7 @@ class Activity:
         if not self._state:
             self._state = execute_in_subprocess(['qdbus', 'org.kde.ActivityManager',
                                                  '/ActivityManager/Activities',
-                                                 'org.kde.ActivityManager.Activities.ActivityState', self.id])[0]
+                                                 'org.kde.ActivityManager.Activities.ActivityState', self._id])[0]
         return ACTIVITY_STATE.get(self._state, self._state)
 
     @state.setter
@@ -149,25 +155,25 @@ class Activity:
                         if line.endswith('\n'):
                             line = line[:-1]
                         return line[5:]
-        except FileNotFoundError:
+        except IOError:
             return 'No command'
 
     def delete(self):
         execute_in_subprocess(['qdbus', 'org.kde.ActivityManager', '/ActivityManager/Activities',
-                               'org.kde.ActivityManager.Activities.RemoveActivity', self.id])
+                               'org.kde.ActivityManager.Activities.RemoveActivity', self._id])
         self._delete_directory()
 
     def activate(self):
         execute_in_subprocess(['qdbus', 'org.kde.ActivityManager', '/ActivityManager/Activities',
-                               'org.kde.ActivityManager.Activities.SetCurrentActivity', self.id])
+                               'org.kde.ActivityManager.Activities.SetCurrentActivity', self._id])
 
     def start(self):
         execute_in_subprocess(['qdbus', 'org.kde.ActivityManager', '/ActivityManager/Activities',
-                               'org.kde.ActivityManager.Activities.StartActivity', self.id])
+                               'org.kde.ActivityManager.Activities.StartActivity', self._id])
 
     def stop(self):
         execute_in_subprocess(['qdbus', 'org.kde.ActivityManager', '/ActivityManager/Activities',
-                               'org.kde.ActivityManager.Activities.StopActivity', self.id])
+                               'org.kde.ActivityManager.Activities.StopActivity', self._id])
 
     @classmethod
     def create(cls, name, args):
