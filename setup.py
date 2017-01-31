@@ -6,11 +6,9 @@ from setuptools import setup, convert_path
 
 def parse_readme():
     """Parse contents of the README."""
-    # Get the long description from the relevant file
     readme_file = str(Path(__file__).parent / 'README.md')
     with codecs.open(readme_file, encoding='utf-8') as handle:
         long_description = handle.read()
-
     return long_description
 
 
@@ -19,16 +17,12 @@ def load_package_meta():
     meta_ns = {}
     with open(meta_path) as f:
         exec(f.read(), meta_ns)
-    return meta_ns['DATA']
+    return meta_ns['METADATA']
+
 
 PKG_META = load_package_meta()
 
 setup(
-    long_description=parse_readme(),
-    install_requires=[
-        'terminaltables',
-        'xdg'
-    ],
     keywords=[
         'kde',
         'activity',
@@ -38,21 +32,30 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'pytivity=pytivity.pytivity:main'
+            'pytivity=pytivity.cli:main'
         ]
     },
     include_package_data=True,
     zip_safe=False,
+    install_requires=[
+        'terminaltables',
+        'xdg',
+        'pydbus'
+    ],
+    tests_require=[
+        'flake8'
+    ],
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.5',
         'Environment :: Console',
     ],
     author=PKG_META['author'],
     author_email=PKG_META['author_email'],
     description=PKG_META['description'],
+    long_description=parse_readme(),
     license=PKG_META['license'],
     name=PKG_META['name'],
     url=PKG_META['url'],
