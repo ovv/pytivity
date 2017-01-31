@@ -25,7 +25,10 @@ PKG_META = load_package_meta()
 
 setup(
     long_description=parse_readme(),
-    install_requires=['terminaltables'],
+    install_requires=[
+        'terminaltables',
+        'xdg'
+    ],
     keywords=[
         'kde',
         'activity',

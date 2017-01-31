@@ -119,9 +119,7 @@ def update(activities, args):
         if args.description:
             activity.description = args.description
         if args.activated:
-            print(activity.activated)
             activity.activated = args.activated
-            print(activity.activated)
         if args.deactivated:
             activity.deactivated = args.deactivated
         if args.started:
