@@ -184,7 +184,7 @@ class KActivity(object):
                             line = line[:-1]
                         return line[5:]
         except IOError:
-            return 'No command'
+            return ''
 
     def delete(self):
         self._activity_bus.RemoveActivity(self.id)
