@@ -15,6 +15,35 @@ ACTIVITY_STATE = {
 
 
 class KActivity(object):
+    """
+    A KDE activity
+
+    This class represent a single kde activity. It can be create by the id or
+    the name of the activity.
+
+    Note:
+        Attributes are cached in the objects. Use the `refresh` method to
+        reset the cache.
+
+        A new activity can be created with the `create` class method
+
+    Args:
+        id_or_name (str): Name or ID of the activity
+         bus: Proxy dbus object to 'org.kde.ActivityManager
+         /ActivityManager/Activities'
+
+    Attributes:
+        id (str): Id of the activity
+        name (str): Name of the activity
+        description (str): Description of the activity
+        icon (str): Icon of the activity
+        state (str): State of the activity (`Started` or `Stopped`)
+        activated (str): Command executed at activation of the activity
+        deactivated (str): Command executed at deactivation of the activity
+        started (str): Command executed at startup of the activity
+        stopped (str): Command executed at shutdown of the activity
+
+    """
     def __init__(self, id_or_name, bus=None):
         if not bus:
             bus = SessionBus()
@@ -36,6 +65,54 @@ class KActivity(object):
         self._deactivated = None
         self._started = None
         self._stopped = None
+
+    def refresh(self):
+        """
+        Reset the cached attributes
+
+        :return: None
+        """
+        self._name = None
+        self._description = None
+        self._icon = None
+        self._state = None
+        self._activated = None
+        self._deactivated = None
+        self._started = None
+        self._stopped = None
+
+    def delete(self):
+        """
+        Delete the activity
+
+        :return: None
+        """
+        self._activity_bus.RemoveActivity(self.id)
+        self._delete_directory()
+
+    def activate(self):
+        """
+        Activate the activity
+
+        :return: None
+        """
+        self._activity_bus.SetCurrentActivity(self.id)
+
+    def start(self):
+        """
+        Start the activity
+
+        :return: None
+        """
+        self._activity_bus.StartActivity(self.id)
+
+    def stop(self):
+        """
+        Stop the activity
+
+        :return: None
+        """
+        self._activity_bus.StopActivity(self.id)
 
     @property
     def name(self):
@@ -186,22 +263,23 @@ class KActivity(object):
         except IOError:
             return ''
 
-    def delete(self):
-        self._activity_bus.RemoveActivity(self.id)
-        self._delete_directory()
-
-    def activate(self):
-        self._activity_bus.SetCurrentActivity(self.id)
-
-    def start(self):
-        self._activity_bus.StartActivity(self.id)
-
-    def stop(self):
-        self._activity_bus.StopActivity(self.id)
-
     @classmethod
     def create(cls, name, icon=None, description=None, activated=None,
                deactivated=None, started=None, stopped=None, bus=None):
+        """
+        Create a new activity
+
+        :param name: Name of the activity
+        :param icon: Icon of the activity
+        :param description: Description of the activity
+        :param activated: Command executed at activation of the activity
+        :param deactivated: Command executed at deactivation of the activity
+        :param started: Command executed at startup of the activity
+        :param stopped: Command executed at shutdown of the activity
+        :param bus: Proxy dbus object to 'org.kde.ActivityManager
+        /ActivityManager/Activities'
+        :return: The new activity
+        """
 
         if not bus:
             bus = SessionBus().get('org.kde.ActivityManager',

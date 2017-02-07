@@ -89,20 +89,22 @@ def main():
     delete_parser.add_argument('name', help='name or id  of the activity')
 
     list_parser.add_argument('-v', '--verbose',
-                             help='display more information', action='count',
-                             dest='verbose',
+                             help='display more informations (3 levels)',
+                             action='count', dest='verbose',
                              default=0)
     list_parser.add_argument('-c', '--commands',
-                             help='display executed commands for all actions',
+                             help='display executed commands when activity is '
+                                  'activated/deactivated/started/stopped',
                              action='store_true',
                              dest='commands')
-    list_parser.add_argument('--icon', help='display the icon',
-                             action='store_true')
-    list_parser.add_argument('--description', help='display the description',
+    list_parser.add_argument('--icon', action='store_true',
+                             help='display the activity(ies) icon(s)',)
+    list_parser.add_argument('--description', help='display the activity(ies) '
+                                                   'description(s)',
                              action='store_true')
     list_parser.add_argument('--id', help='display the activity(ies) id(s)',
                              action='store_true')
-    list_parser.add_argument('--raw', help='display raw data',
+    list_parser.add_argument('--raw', help='output non formatted data',
                              action='store_true')
     list_parser.add_argument('-n', '--name',
                              help='display only the named activity')
