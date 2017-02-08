@@ -298,15 +298,8 @@ def activate(args, activity_bus, notification_bus=None):
     activity = KActivity(args.name, bus=activity_bus)
     activity.activate()
 
-    if args.stop:
-        for id_ in activity_bus.ListActivities(2):
-            if id_ != activity.id:
-                act = KActivity(id_)
-                act.stop()
-                print('Activity ({name}) stopped. ID: {id}'.format(
-                    name=act.name,
-                    id=act.id))
-                time.sleep(0.2)
+    print('Activity ({name}) activated. ID: {id}'.format(name=activity.name,
+                                                         id=activity.id))
 
     if notification_bus:
         _send_notification(notification_bus,
@@ -314,8 +307,15 @@ def activate(args, activity_bus, notification_bus=None):
                            activity.id,
                            activity.icon)
 
-    print('Activity ({name}) activated. ID: {id}'.format(name=activity.name,
-                                                         id=activity.id))
+    if args.stop:
+        for id_ in activity_bus.ListActivities(2):
+            if id_ != activity.id:
+                time.sleep(0.2)
+                act = KActivity(id_)
+                act.stop()
+                print('Activity ({name}) stopped. ID: {id}'.format(
+                    name=act.name,
+                    id=act.id))
 
 
 def _list_activities(activity_bus):
