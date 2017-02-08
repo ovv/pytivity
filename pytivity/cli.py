@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+import time
 
 from pydbus import SessionBus
 from terminaltables import AsciiTable
@@ -114,6 +115,8 @@ def main():
     stop_parser.add_argument('name', help='name or id  of the activity')
 
     activate_parser.add_argument('name', help='name or id  of the activity')
+    activate_parser.add_argument('-s', '--stop', action='store_true',
+                                 help='Stop others activities', dest='stop')
 
     args = main_parser.parse_args()
 
@@ -294,6 +297,16 @@ def stop(args, activity_bus, notification_bus=None):
 def activate(args, activity_bus, notification_bus=None):
     activity = KActivity(args.name, bus=activity_bus)
     activity.activate()
+
+    if args.stop:
+        for id_ in activity_bus.ListActivities(2):
+            if id_ != activity.id:
+                act = KActivity(id_)
+                act.stop()
+                print('Activity ({name}) stopped. ID: {id}'.format(
+                    name=act.name,
+                    id=act.id))
+                time.sleep(0.2)
 
     if notification_bus:
         _send_notification(notification_bus,
