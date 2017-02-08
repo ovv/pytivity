@@ -161,7 +161,7 @@ def create(args, activity_bus, notification_bus=None):
                            activity.id,
                            activity.icon)
 
-    print('Activity ({name}) created. ID: {id}'.format(name=args.name,
+    print('Activity ({name}) created. ID: {id}'.format(name=activity.name,
                                                        id=activity.id))
 
 
@@ -189,7 +189,7 @@ def update(args, activity_bus, notification_bus=None):
                            activity.id,
                            activity.icon)
 
-    print('Activity ({name}) updated. ID: {id}'.format(name=args.name,
+    print('Activity ({name}) updated. ID: {id}'.format(name=activity.name,
                                                        id=activity.id))
 
 
@@ -204,7 +204,7 @@ def delete(args, activity_bus, notification_bus=None):
                            activity.icon)
 
     print('Activity ({name}) successfully deleted. ID: {id}'.format(
-        name=args.name, id=activity.id))
+        name=activity.name, id=activity.id))
 
 
 def list_short(args, activity_bus, notification_bus=None):
@@ -273,7 +273,7 @@ def start(args, activity_bus, notification_bus=None):
                            activity.id,
                            activity.icon)
 
-    print('Activity ({name}) started. ID: {id}'.format(name=args.name,
+    print('Activity ({name}) started. ID: {id}'.format(name=activity.name,
                                                        id=activity.id))
 
 
@@ -287,7 +287,7 @@ def stop(args, activity_bus, notification_bus=None):
                            activity.id,
                            activity.icon)
 
-    print('Activity ({name}) stopped. ID: {id}'.format(name=args.name,
+    print('Activity ({name}) stopped. ID: {id}'.format(name=activity.name,
                                                        id=activity.id))
 
 
@@ -301,7 +301,7 @@ def activate(args, activity_bus, notification_bus=None):
                            activity.id,
                            activity.icon)
 
-    print('Activity ({name}) activated. ID: {id}'.format(name=args.name,
+    print('Activity ({name}) activated. ID: {id}'.format(name=activity.name,
                                                          id=activity.id))
 
 
