@@ -1,14 +1,15 @@
 # Pytivity
 
-Pytivity is a python3 command line manager for your KDE activities.
+Pytivity is a python 3.5 command line manager for your KDE activities.
 
 ## Installation
 
 ```bash
-pip install pytivity
+pip3 install pytivity
 ```
 
-Pytivity rely on `pydbus` to connect to dbus. See `pydbus` [documentation](https://github.com/LEW21/pydbus) for installation instruction.
+Pytivity rely on the `pydbus` module to connect to dbus which requires additional packages.
+See [installation](https://github.com/Ovvovy/pytivity/tree/master/doc/install.md) for additional instructions and informations.
 
 ## Basic usage
 
