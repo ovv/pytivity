@@ -144,7 +144,7 @@ class KActivity(object):
 
     @icon.setter
     def icon(self, icon):
-        self._activity_bus.SetActivityDescription(self.id, icon)
+        self._activity_bus.SetActivityIcon(self.id, icon)
         self._icon = icon
 
     @property
