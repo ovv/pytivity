@@ -1,7 +1,6 @@
 import os
-import shutil
-
 import xdg
+import shutil
 
 from pydbus import SessionBus
 
@@ -213,11 +212,17 @@ class KActivity(object):
         self._started = command
 
     def _create_directory(self):
+        if not os.path.isdir(PATH):
+            os.mkdir(PATH)
+
         path = os.path.join(PATH, self.id)
         if not os.path.isdir(path):
-            for p in ['', '/activated', '/deactivated', '/started',
-                      '/stopped']:
-                os.mkdir(path + p)
+            os.mkdir(path)
+
+        for dir in ['activated', 'deactivated', 'started', 'stopped']:
+            p = os.path.join(path, dir)
+            if not os.path.isdir(p):
+                os.mkdir(p)
 
     def _find_id(self, name):
         for activity_id in self._activity_bus.ListActivities(

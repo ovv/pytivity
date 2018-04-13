@@ -91,3 +91,6 @@ ENV/
 # Custom
 .idea/
 .pyvenv*
+
+Pipfile
+Pipfile.lock
