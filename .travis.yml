@@ -1,0 +1,26 @@
+language: python
+
+python:
+  - 3.5
+  - 3.6
+
+install:
+  - pip install -r requirements.txt
+  - pip install flake8
+
+script:
+  - python setup.py flake8
+  - python setup.py sdist
+  - python setup.py bdist_wheel
+
+deploy:
+  provider: pypi
+  distribution: sdist bdist_wheel
+  user: Ovv
+  password:
+    secure: IOYR9kGpo9WpWkIJVHndnr3T6XAWE9KKMkND+A/f234E9u2k50Opou849QALC4N2UFjWslZ42SS7riietr+e7HwPc9dCe0MnwbBL2cIjtmpFvx/3oqJTzFLtw0r/n5jXbKuuWaTDptZVsURkH3mI3OyAimp3heYbduF8qb65lA+iP2F3Rs3uP/ur30eQ2IaZImyi1tiPSCFFDJ8PIstOibfsgqWh/utzjsmaf5mr0WNAZ7WsxN0IBc+XaTbWz72VVALQEtH9nGpQhp4BRcV2xMNNTjS95UNKTvOX8BoGVbUz9lvl4vCanlSOBGrzhbzU91pWbd18RMI4l4OSF81lgcBod46wow3464ewsAT3/TOLk+iqIysLEbaq93XLNaDIGr+xpz0Y5EutdDZlfX8mrx8NunMlZDzyWZhaMEI6QKLQsVcRk86GujFiof+TWWaAsJH8k5t+MXKXrVu37w+TM0ZVayRvZESryRz/ZJ11kCwZTLDdrXjZShnuouN6GkQG/s3uB3eZAVCPKslTayhGpud778VoYveQUnO55p6o6HvK7fZKR7NztHrpbdKhRG6idCPnPYjSZt/aS5W0rbMLrUqhDsVHjRidKvHXUXP/+Rwwz/UCigBj7CDrbhPFJMoU3aRCzlLjZyKgy7w3BY7+aqqdbns+s2tzTDF3Kte0+08=
+  on:
+    repo: ovv/pytivity
+    branch: master
+    python: 3.6
+    tags: true
