@@ -8,5 +8,5 @@ METADATA = {
     "url": "https://github.com/Ovvovy/pytivity",
     "license": 'MIT',
     "name": 'pytivity',
-    "version": '0.0.4',
+    "version": '0.0.5',
 }
