@@ -222,7 +222,6 @@ def list_short(args, activity_bus, notification_bus=None):
 
 def list_act(args, activity_bus, notification_bus=None):
     output = list()
-    header = ['Name', 'State']
 
     if args.name:
         activities = [KActivity(args.name, bus=activity_bus)]
@@ -230,15 +229,7 @@ def list_act(args, activity_bus, notification_bus=None):
         activities = [KActivity(activity_id, bus=activity_bus) for activity_id
                       in _list_activities(activity_bus=activity_bus)]
 
-    if args.id or args.verbose > 2:
-        header = ['ID'] + header
-    if args.commands or args.verbose > 0:
-        header += ['Cmd Activated', 'Cmd Deactivated', 'Cmd started',
-                   'Cmd stopped']
-    if args.icon or args.verbose > 1:
-        header += ['Icon']
-    if args.description or args.verbose > 1:
-        header += ['Description']
+    header = _build_table_headers(args)
 
     for activity in activities:
         if args.id or args.verbose > 2:
@@ -264,6 +255,21 @@ def list_act(args, activity_bus, notification_bus=None):
         output.insert(0, header)
         table = AsciiTable(table_data=output, title='Activities')
         print(table.table)
+
+
+def _build_table_headers(args):
+    header = ['Name', 'State']
+    if args.id or args.verbose > 2:
+        header = ['ID'] + header
+    if args.commands or args.verbose > 0:
+        header += ['Cmd Activated', 'Cmd Deactivated', 'Cmd started',
+                   'Cmd stopped']
+    if args.icon or args.verbose > 1:
+        header += ['Icon']
+    if args.description or args.verbose > 1:
+        header += ['Description']
+
+    return header
 
 
 def start(args, activity_bus, notification_bus=None):
