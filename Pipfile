@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pydbus = "*"
+xdg = "*"
+terminaltables = "*"
+
+[dev-packages]
+"flake8" = "*"
+isort = "*"
+black = "*"
+mypy = "*"
+tox = "*"
+wheel = "*"
+
+[requires]
+python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true
