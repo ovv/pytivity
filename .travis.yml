@@ -1,17 +1,32 @@
 language: python
 
-python:
-  - 3.5
-  - 3.6
+matrix:
+  fast_finish: true
+  include:
+    - python: 3.6
+    - python: 3.7
+      dist: xenial
+      sudo: true
+    - python: 3.7-dev
+      dist: xenial
+      sudo: true
+    - python: nightly
+      dist: xenial
+      sudo: true
+  allow_failures:
+    - python: nightly
+      dist: xenial
+      sudo: true
+    - python: 3.7-dev
+      dist: xenial
+      sudo: true
 
 install:
-  - pip install -r requirements.txt
-  - pip install flake8
+  - pip install pipenv
+  - pipenv install --deploy --dev --ignore-pipfile
 
 script:
-  - python setup.py flake8
-  - python setup.py sdist
-  - python setup.py bdist_wheel
+  - pipenv run tests/test.sh
 
 deploy:
   provider: pypi

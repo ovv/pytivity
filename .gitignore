@@ -92,5 +92,4 @@ ENV/
 .idea/
 .pyvenv*
 
-Pipfile
-Pipfile.lock
+.mypy_cache

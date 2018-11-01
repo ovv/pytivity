@@ -1,16 +1,12 @@
 import os
-import xdg
 import shutil
 
+import xdg
 from pydbus import SessionBus
 
-SHORTCUT_FILE = '[Desktop Entry]\nName={name}' \
-                '\nExec={command}\nType=Application\n'
-PATH = os.path.join(xdg.XDG_DATA_HOME, 'kactivitymanagerd/activities')
-ACTIVITY_STATE = {
-    2: 'Started',
-    4: 'Stopped'
-}
+SHORTCUT_FILE = "[Desktop Entry]\nName={name}" "\nExec={command}\nType=Application\n"
+PATH = os.path.join(xdg.XDG_DATA_HOME, "kactivitymanagerd/activities")
+ACTIVITY_STATE = {2: "Started", 4: "Stopped"}
 
 
 class KActivity(object):
@@ -43,11 +39,13 @@ class KActivity(object):
         stopped (str): Command executed at shutdown of the activity
 
     """
+
     def __init__(self, id_or_name, bus=None):
         if not bus:
             bus = SessionBus()
-            self._activity_bus = bus.get('org.kde.ActivityManager',
-                                         '/ActivityManager/Activities')
+            self._activity_bus = bus.get(
+                "org.kde.ActivityManager", "/ActivityManager/Activities"
+            )
         else:
             self._activity_bus = bus
 
@@ -158,57 +156,57 @@ class KActivity(object):
     @property
     def activated(self):
         if not self._activated:
-            self._activated = self._command_in_activity_script('activated')
+            self._activated = self._command_in_activity_script("activated")
         return self._activated
 
     @activated.setter
     def activated(self, command):
         if command:
-            self._create_activity_script('activated', command)
+            self._create_activity_script("activated", command)
         else:
-            self._delete_activity_script('activated')
+            self._delete_activity_script("activated")
         self._activated = command
 
     @property
     def deactivated(self):
         if not self._deactivated:
-            self._deactivated = self._command_in_activity_script('deactivated')
+            self._deactivated = self._command_in_activity_script("deactivated")
         return self._deactivated
 
     @deactivated.setter
     def deactivated(self, command):
         if command:
-            self._create_activity_script('deactivated', command)
+            self._create_activity_script("deactivated", command)
         else:
-            self._delete_activity_script('deactivated')
+            self._delete_activity_script("deactivated")
         self._deactivated = command
 
     @property
     def stopped(self):
         if not self._stopped:
-            self._stopped = self._command_in_activity_script('stopped')
+            self._stopped = self._command_in_activity_script("stopped")
         return self._stopped
 
     @stopped.setter
     def stopped(self, command):
         if command:
-            self._create_activity_script('stopped', command)
+            self._create_activity_script("stopped", command)
         else:
-            self._delete_activity_script('stopped')
+            self._delete_activity_script("stopped")
         self._stopped = command
 
     @property
     def started(self):
         if not self._started:
-            self._started = self._command_in_activity_script('started')
+            self._started = self._command_in_activity_script("started")
         return self._started
 
     @started.setter
     def started(self, command):
         if command:
-            self._create_activity_script('started', command)
+            self._create_activity_script("started", command)
         else:
-            self._delete_activity_script('started')
+            self._delete_activity_script("started")
         self._started = command
 
     def _create_directory(self):
@@ -219,58 +217,65 @@ class KActivity(object):
         if not os.path.isdir(path):
             os.mkdir(path)
 
-        for dir in ['activated', 'deactivated', 'started', 'stopped']:
+        for dir in ["activated", "deactivated", "started", "stopped"]:
             p = os.path.join(path, dir)
             if not os.path.isdir(p):
                 os.mkdir(p)
 
     def _find_id(self, name):
         for activity_id in self._activity_bus.ListActivities(
-                2) + self._activity_bus.ListActivities(4):
+            2
+        ) + self._activity_bus.ListActivities(4):
             if name == self._activity_bus.ActivityName(activity_id):
                 return activity_id
-        raise ValueError('No activity exist with the name: {}'.format(name))
+        raise ValueError("No activity exist with the name: {}".format(name))
 
     def _delete_directory(self):
         shutil.rmtree(os.path.join(PATH, self.id))
 
     def _create_activity_script(self, action, command):
         self._create_directory()
-        path = '{path}/{id}/{action}/{name}.desktop'.format(path=PATH,
-                                                            id=self.id,
-                                                            action=action,
-                                                            name=self.name)
-        with open(path, 'w') as f:
+        path = "{path}/{id}/{action}/{name}.desktop".format(
+            path=PATH, id=self.id, action=action, name=self.name
+        )
+        with open(path, "w") as f:
             f.write(SHORTCUT_FILE.format(name=self.name, command=command))
 
     def _delete_activity_script(self, action):
-        path = '{path}/{id}/{action}/{name}.desktop'.format(path=PATH,
-                                                            id=self.id,
-                                                            action=action,
-                                                            name=self.name)
+        path = "{path}/{id}/{action}/{name}.desktop".format(
+            path=PATH, id=self.id, action=action, name=self.name
+        )
         try:
             os.remove(path)
         except IOError:
             pass
 
     def _command_in_activity_script(self, action):
-        path = '{path}/{id}/{action}/{name}.desktop'.format(path=PATH,
-                                                            id=self.id,
-                                                            action=action,
-                                                            name=self.name)
+        path = "{path}/{id}/{action}/{name}.desktop".format(
+            path=PATH, id=self.id, action=action, name=self.name
+        )
         try:
-            with open(path, 'r') as f:
+            with open(path, "r") as f:
                 for line in f:
-                    if line.startswith('Exec='):
-                        if line.endswith('\n'):
+                    if line.startswith("Exec="):
+                        if line.endswith("\n"):
                             line = line[:-1]
                         return line[5:]
         except IOError:
-            return ''
+            return ""
 
     @classmethod
-    def create(cls, name, icon=None, description=None, activated=None,
-               deactivated=None, started=None, stopped=None, bus=None):
+    def create(
+        cls,
+        name,
+        icon=None,
+        description=None,
+        activated=None,
+        deactivated=None,
+        started=None,
+        stopped=None,
+        bus=None,
+    ):
         """
         Create a new activity
 
@@ -287,8 +292,9 @@ class KActivity(object):
         """
 
         if not bus:
-            bus = SessionBus().get('org.kde.ActivityManager',
-                                   '/ActivityManager/Activities')
+            bus = SessionBus().get(
+                "org.kde.ActivityManager", "/ActivityManager/Activities"
+            )
 
         activity_id = bus.AddActivity(name)
 
