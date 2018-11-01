@@ -13,7 +13,7 @@ from .__meta__ import METADATA
 def main():
     main_parser = argparse.ArgumentParser(description=METADATA['description'])
     main_parser.set_defaults(func=list_short)
-    main_parser.add_argument('-v', '--version', help='show pytivity version',
+    main_parser.add_argument('--version', help='show pytivity version',
                              action='store_true')
     main_parser.add_argument('-n', '--notification', action='store_true',
                              help='display a system notification')
