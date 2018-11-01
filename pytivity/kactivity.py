@@ -1,11 +1,11 @@
 import os
 import shutil
 
-import xdg
 from pydbus import SessionBus
+from xdg.BaseDirectory import xdg_data_home
 
 SHORTCUT_FILE = "[Desktop Entry]\nName={name}" "\nExec={command}\nType=Application\n"
-PATH = os.path.join(xdg.XDG_DATA_HOME, "kactivitymanagerd/activities")
+PATH = os.path.join(xdg_data_home, "kactivitymanagerd/activities")
 ACTIVITY_STATE = {2: "Started", 4: "Stopped"}
 
 

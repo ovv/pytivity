@@ -5,8 +5,8 @@ name = "pypi"
 
 [packages]
 pydbus = "*"
-xdg = "*"
 terminaltables = "*"
+pyxdg = "*"
 
 [dev-packages]
 "flake8" = "*"
