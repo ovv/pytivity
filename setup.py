@@ -12,7 +12,7 @@ def load_package_meta():
     return meta_ns["METADATA"]
 
 
-LONG_DESCRIPTION = pathlib.Path("README.md").read_text("utf-8")
+LONG_DESCRIPTION = pathlib.Path("README.rst").read_text("utf-8")
 PKG_META = load_package_meta()
 
 setup(
