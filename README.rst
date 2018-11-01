@@ -7,6 +7,7 @@ Installation
 ------------
 
 .. code::
+
     $ pip3 install pytivity
 
 Pytivity rely on the `pydbus` module to connect to dbus which requires additional packages, `pydbus installation instruction <https://github.com/LEW21/pydbus>`_.
@@ -23,11 +24,13 @@ Pytivity enables you to easily create, update, delete, start, stop or activate a
 And set commands to be run when an activity is started, stopped, activated or deactivated.
 
 .. code::
+
     $ pytivity create/update {name} --activated {command} --deactivated {command} --started {command} --stopped {command}
 
 All commands have help message that explains the available arguments.
 
 .. code::
+
     $ pytivity {command} -h
 
 Changelog
