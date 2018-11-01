@@ -21,7 +21,7 @@ setup(
     entry_points={"console_scripts": ["pytivity=pytivity.cli:main"]},
     include_package_data=True,
     zip_safe=False,
-    install_requires=["terminaltables", "xdg", "pydbus"],
+    install_requires=["terminaltables", "pyxdg", "pydbus"],
     tests_require=["flake8"],
     classifiers=[
         "License :: OSI Approved :: MIT License",
